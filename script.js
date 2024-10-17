@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong");
 });
 
-app.route("/").get((req, res) => {
+app.route('/').get((req, res) => {
   res.render("home.ejs", {});
 });
 
