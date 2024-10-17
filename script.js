@@ -50,44 +50,73 @@ app.post("/back", (req, res) => {
 });
 */
 
-app.post("/search", (req, res) => {
-  const word = encodeURIComponent(req.body.character);
-  const url = `https://anapioficeandfire.com/api/characters?name=${word}`;
-  https
-    .get(url, (response) => {
-      let resContent = "";
-      response.on("data", (data) => {
-        resContent += data;
-      });
-
-      response.on("end", () => {
-        try {
-          const jsonObj = JSON.parse(resContent);
-          if (jsonObj.length > 0) {
-            const character = jsonObj[0];
-            res.render("individual.ejs", {
-              character: character,
-            });
-          } else {
-            res.send("Personaje no encontrado. Intenta con otro nombre.");
-          }
-        } catch (error) {
-          console.log("Error al parsear la respuesta", error);
-          res.send("Error al procesar los datos. Inténtalo de nuevo.");
-        }
-      });
-    })
-    .on("error", (e) => {
-      console.log("Error al realizar la solicitud", e);
-      res.send("Error en la solicitud. Inténtalo de nuevo.");
-    });
-});
-
-app.post("/backhome", (req, res) => {
+app.post('/backhome', (req, res) => {
   res.redirect("/");
 });
 
-// Esto inicia el servidor y hace que escuche en el puerto 5000
+app.post('/search', (req, res) => {
+  const characterName = encodeURIComponent(req.body.character);
+  const url1 = `https://thronesapi.com/api/v1/characters?name=${characterName}`; // Primera API
+  const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`; // Segunda API
+  let characterData1 = null;
+  let characterData2 = null;
+
+  // Llamar a la primera API
+  https.get(url1, (response) => {
+    let resContent1 = '';
+    response.on("data", (data) => {
+      resContent1 += data;
+    });
+
+    response.on("end", () => {
+      const jsonObj1 = JSON.parse(resContent1);
+      characterData1 = jsonObj1.length > 0 ? jsonObj1[0] : null; // Obtener el primer personaje
+
+      // Si no se encontró en la primera API, seguir buscando en la segunda API
+      if (!characterData1) {
+        console.log("No se encontró en la primera API, buscando en la segunda...");
+      } 
+
+      // Llamar a la segunda API
+      https.get(url2, (response) => {
+        let resContent2 = '';
+        response.on("data", (data) => {
+          resContent2 += data;
+        });
+
+        response.on("end", () => {
+          const jsonObj2 = JSON.parse(resContent2);
+          characterData2 = jsonObj2.length > 0 ? jsonObj2[0] : null; // Obtener el primer personaje
+
+          // Comprobar si se encontró en alguna de las APIs
+          if (characterData1 && characterData2) {
+            res.render("individual.ejs", {
+              character1: characterData1,
+              character2: characterData2,
+            });
+          } else if(characterData2){
+            res.render("individual.ejs", {
+              character1: characterData1,
+              character2: characterData2,
+            });
+          } 
+          else {
+            res.send("Personaje no encontrado. Intenta con otro nombre.");
+          }
+        });
+      }).on("error", (e) => {
+        console.log("Error al realizar la solicitud a la segunda API", e);
+        res.send("Error en la solicitud a la segunda API.");
+      });
+    });
+  }).on("error", (e) => {
+    console.log("Error al realizar la solicitud a la primera API", e);
+    res.send("Error en la solicitud a la primera API.");
+  });
+});
+
+
+
 app.listen(3000, () => {
-  console.log("Listening on port 3000"); // Mensaje en la consola cuando el servidor está listo
+  console.log("Listening on port 3000"); 
 });

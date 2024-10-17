@@ -1,21 +1,26 @@
-<!-- individual.ejs -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title><%= character.fullName %></title>
+    <title><%= character2.name %></title>
 </head>
 <body>
-    <h1><%= character.fullName %></h1>
-    <p><strong>ID:</strong> <%= character.id %></p>
-    <p><strong>Alias:</strong> <%= character.aliases.join(", ") || "N/A" %></p>
-    <p><strong>Título:</strong> <%= character.title.join(", ") || "N/A" %></p>
-    <p><strong>Familia:</strong> <%= character.family || "N/A" %></p>
-    <img src="<%= character.imageUrl || 'default-image.png' %>" alt="<%= character.lastName %>">
-    <form action="/next" method="post">
+    <img src="<%= character1.imageUrl || 'default-image.png' %>" alt="<%= character2.name %>">
+    <h2><strong>ID:</strong> <%= character1.id %></h2>
+    <h1><%= character1.firstName %></h1>
+    <h1><%= character1.lastName %></h1>
+    <p><strong>Born in:</strong> <%= character2.born || "N/A" %></p>
+    <p><strong>Died in:</strong> <%= character2.died || "N/A" %></p>
+    <p><strong>Título:</strong> <%= character1.titles || "N/A" %></p>
+    <p><strong>Alias:</strong> <%= character2.aliases || "N/A" %></p>
+    <p><strong>Familia:</strong> <%= character1.family || "N/A" %></p>
+    <form action="/nextcharacter" method="post">
         <button type="submit">Siguiente</button>
     </form>
-    <form action="/back" method="post">
+    <form action="/backcharacter" method="post">
+        <button type="submit">Siguiente</button>
+    </form>
+    <form action="/backhome" method="post">
         <button type="submit">Anterior</button>
     </form>
 </body>
