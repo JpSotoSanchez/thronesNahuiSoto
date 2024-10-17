@@ -1,0 +1,22 @@
+<!-- individual.ejs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><%= character.name %></title>
+</head>
+<body>
+    <h1><%= character.name %></h1>
+    <p><strong>ID:</strong> <%= character.id %></p>
+    <p><strong>Alias:</strong> <%= character.aliases.join(", ") || "N/A" %></p>
+    <p><strong>Título:</strong> <%= character.titles.join(", ") || "N/A" %></p>
+    <p><strong>Familia:</strong> <%= character.family || "N/A" %></p>
+    <img src="<%= character.imageUrl || 'default-image.png' %>" alt="<%= character.name %>">
+    <form action="/next" method="post">
+        <button type="submit">Siguiente</button>
+    </form>
+    <form action="/back" method="post">
+        <button type="submit">Anterior</button>
+    </form>
+</body>
+</html>

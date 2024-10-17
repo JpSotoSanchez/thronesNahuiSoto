@@ -1,0 +1,129 @@
+body {
+    font-family: "Courier New", sans-serif;
+}
+header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 20px 10%;
+   background-color: #fff;
+   border-bottom: 1px solid #f2f4f2;
+}
+header h1 {
+   font-family: "Game of Thrones";
+   font-size: 1.3em;
+   margin: 0;
+}
+@font-face {
+    font-family: "Game of Thrones";
+    src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot");
+    src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.svg#Game of Thrones")format("svg");
+}
+nav ul {
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   display: flex;
+   gap: 40px;
+}
+
+nav ul li {
+   display: inline;
+}
+nav ul li a {
+   text-decoration: none;
+   color: #000;
+   font-family: 'Game of Thrones';
+}
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 14px 20px;
+}
+.search-container input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+.search-container button {
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #bdb7b7;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+.search-container button:hover {
+    background: #948989;
+}
+.hero-section {
+   position: relative;
+   height: 100vh;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   overflow: hidden;
+}
+.hero-image {
+   position: absolute;
+   top: -2%; /* Ajustar la posición de la imagen */
+   left: 0;
+   width: 100%;
+   height: 150vh; /* Aumentar la altura para cubrir más espacio */
+   object-fit: cover;
+   filter: blur(10px); /* Aplicamos blur al inicio */
+   transition: filter 0.5s ease; /* Transición del blur */
+}
+.hero-text {
+   font-family: "Game of Thrones";
+   position: relative;
+   color: white;
+   font-size: 4em;
+   z-index: 1;
+   opacity: 1;
+   transition: opacity 0.5s ease; /* Transición de la opacidad */
+}
+.scrolled .hero-image {
+   filter: blur(0); /* Elimina el blur */
+}
+
+.scrolled .hero-text {
+   opacity: 0; /* Desaparece el texto */
+}
+.nav-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   max-width: 1200px;
+   margin: 0 auto;
+}
+.background-section {
+   background-color: #f4f4f4; /* Fondo claro */
+   padding: 40px 20px;
+   text-align: center;
+   border-top: 1px solid #ccc; /* Línea de separación */
+   border-bottom: 1px solid #ccc;
+   margin-bottom: 20px;
+}
+
