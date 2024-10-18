@@ -92,24 +92,21 @@ app.post('/search', (req, res) => {
           // Si hay personajes en la primera API, buscar coincidencias
           if (characterData1.length > 0 && characterData2) {
             for (let i = 0; i < characterData1.length; i++) {
-              console.log(characterData1[i].fullName);
               if (characterData1[i].fullName === characterData2.name) {
                 datos1 = characterData1[i]; // Almacenar el personaje que coincide
-                console.log(datos1);
                 break;
               }
             }
           }
-
           // Comprobar si se encontró en alguna de las APIs
           if (datos1 && characterData2) {
             res.render("individual.ejs", {
               character1: datos1,
               character2: characterData2,
             });
-          } else if (characterData2) {
+          } else if (!datos1 && characterData2) {
             res.render("individual.ejs", {
-              character1: datos1 || null, // Asumiendo que characterData1[0] podría ser relevante
+              character1: null, // Asumiendo que characterData1[0] podría ser relevante
               character2: characterData2,
             });
           } else {

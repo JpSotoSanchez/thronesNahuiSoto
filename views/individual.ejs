@@ -5,23 +5,34 @@
     <title><%= character2.name %></title>
 </head>
 <body>
-    <img src="<%= character1.imageUrl || 'default-image.png' %>" alt="<%= character2.name %>">
-    <h2><strong>ID:</strong> <%= character1.id %></h2>
-    <h1><%= character1.firstName %></h1>
-    <h1><%= character1.lastName %></h1>
+    <% 
+    var imagen = locals.character1 ? character1.imageUrl : 'default.png';
+    var id = locals.character1 ? character1.id : "N/A";
+    var firstName = locals.character1 ? character1.firstName : character2.name.split(' ')[0];
+    var lastName = locals.character1 ? character1.lastName : character2.name.split(' ')[1];
+    var title = locals.character1 ? character1.title : character2.titles;
+    var family = locals.character1 ? character1.family : "Unknown";
+    var aliases = character2.aliases.join(', ');
+    %>
+
+    <img src="<%= imagen %>" alt="<%= character2.name %>">
+    <h2><strong>ID:</strong> <%= id %></h2>
+    <h1><%= firstName %></h1>
+    <h1><%= lastName %></h1>
     <p><strong>Born in:</strong> <%= character2.born || "N/A" %></p>
     <p><strong>Died in:</strong> <%= character2.died || "N/A" %></p>
-    <p><strong>Título:</strong> <%= character1.title || "N/A" %></p>
-    <p><strong>Alias:</strong> <%= character2.aliases || "N/A" %></p>
-    <p><strong>Familia:</strong> <%= character1.family || "N/A" %></p>
+    <p><strong>Título:</strong> <%= title %></p>
+    <p><strong>Alias:</strong> <%= aliases || "N/A" %></p>
+    <p><strong>Familia:</strong> <%= family %></p>
+
     <form action="/nextcharacter" method="post">
         <button type="submit">Siguiente</button>
     </form>
     <form action="/backcharacter" method="post">
-        <button type="submit">Siguiente</button>
+        <button type="submit">Anterior</button>
     </form>
     <form action="/backhome" method="post">
-        <button type="submit">Anterior</button>
+        <button type="submit">Volver a Inicio</button>
     </form>
 </body>
 </html>
