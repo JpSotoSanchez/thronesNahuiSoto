@@ -50,7 +50,7 @@ app.post("/back", (req, res) => {
 });
 */
 
-app.post('/backhome', (req, res) => {
+app.get('/backhome', (req, res) => {
   res.redirect("/");
 });
 
@@ -110,7 +110,7 @@ app.post('/search', (req, res) => {
               character2: characterData2,
             });
           } else {
-            res.send("Personaje no encontrado. Intenta con otro nombre.");
+            res.render("error.ejs");
           }
         });
       }).on("error", (e) => {
@@ -124,6 +124,12 @@ app.post('/search', (req, res) => {
   });
 });
 
+app.get('/about', (req, res) => {
+  res.render("about.ejs");
+});
+app.get('/houses', (req, res) => {
+  res.render("houses.ejs");
+});
 
 app.listen(3000, () => {
   console.log("Listening on port 3000"); 

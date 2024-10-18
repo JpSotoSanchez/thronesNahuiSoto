@@ -14,6 +14,10 @@ header h1 {
    font-size: 1.3em;
    margin: 0;
 }
+header h1 a{
+   text-decoration: none;
+   color: #000;
+}
 @font-face {
     font-family: "Game of Thrones";
     src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot");
@@ -29,6 +33,11 @@ nav ul {
    padding: 0;
    display: flex;
    gap: 40px;
+}
+
+.titulo{
+   font-family: "Game of Thrones";
+   margin: 0;
 }
 
 nav ul li {
