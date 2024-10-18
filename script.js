@@ -99,7 +99,8 @@ var iterador=1;
 var min=1;
 var max=2134;
 
-app.get('/search/', async (req, res) => {
+app.get('/search/:iterador', async (req, res) => {
+  iterador=1;
   try {
     const url1 = `https://thronesapi.com/api/v2/Characters`;
     const url2 = `https://anapioficeandfire.com/api/characters/${iterador}`;
@@ -109,36 +110,26 @@ app.get('/search/', async (req, res) => {
     console.log(characterData2);
     console.log(characterData2[0]);
     if (characterData1.length > 0 && characterData2) {
-      console.log("SE ENTRO EN EL IF PARA ENCONTRAR COINCIDENCIA")
       for (let i = 0; i < characterData1.length; i++) {
-          console.log("Nombre1");
-          console.log(characterData1[i].fullName);
-          console.log("Nombre2");
-          console.log(characterData2.name);
         if (characterData1[i].fullName == characterData2[0].name) {
           datos1 = characterData1[i]; // Almacenar el personaje que coincide
           break;
         }
       }
     }
-    console.log("Datos del 1")
-    console.log(datos1);
-    console.log("Datos del 2")
-    console.log(characterData2);
-    // Renderiza la vista con los datos encontrados
     if (datos1 && characterData2) {
-      console.log(datos1);
-      console.log(characterData2);
       res.render("individual.ejs", {
-        character1: datos1,
-        character2: characterData2[0],
+        character1: datos1,          // Pasamos el personaje encontrado en la primera API
+        character2: characterData2[0], // Pasamos el personaje encontrado en la segunda API
+        iterador: iterador            // Pasamos el valor del iterador
       });
-    } else if (characterData2)  {
+    } else if (characterData2) {
       res.render("individual.ejs", {
-        character1: null,
-        character2: characterData2,
+        character1: null,            // No se encontró coincidencia en la primera API
+        character2: characterData2[0],  // Pasamos el personaje encontrado en la segunda API
+        iterador: iterador            // Pasamos el valor del iterador
       });
-    }
+    }    
     else{
       res.render("error.ejs"); 
     }
