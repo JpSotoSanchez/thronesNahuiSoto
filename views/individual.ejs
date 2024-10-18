@@ -21,7 +21,7 @@
       </header>
     <% 
     var imagen = locals.character1 ? character1.imageUrl : 'Imagenes/default.png';
-    var id = locals.character1 ? character1.id : "N/A";
+    var id = locals.character1 ? character1.id+1 : "N/A";
     var firstName = locals.character1 ? character1.firstName : character2.name.split(' ')[0];
     var lastName = locals.character1 ? character1.lastName : character2.name.split(' ')[1];
     var title = locals.character1 ? character1.title : character2.titles;
