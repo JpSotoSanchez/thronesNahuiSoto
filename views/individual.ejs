@@ -10,17 +10,17 @@
 <body>
     <header>
         <div class="nav-container">
-          <h1><a href="backhome">Wiki</a></h1>
+        <h1><a href="/backhome">WIKI</a></h1>
           <nav>
             <ul>
-              <li><a href="houses">HOUSES</a></li>
-              <li><a href="about">ABOUT</a></li>
+              <li><a href="/houses">HOUSES</a></li>
+              <li><a href="/about">ABOUT</a></li>
             </ul>
           </nav>
         </div>
       </header>
     <% 
-    var imagen = locals.character1 ? character1.imageUrl : 'default.png';
+    var imagen = locals.character1 ? character1.imageUrl : 'Imagenes/default.png';
     var id = locals.character1 ? character1.id : "N/A";
     var firstName = locals.character1 ? character1.firstName : character2.name.split(' ')[0];
     var lastName = locals.character1 ? character1.lastName : character2.name.split(' ')[1];
@@ -40,10 +40,10 @@
         <p><strong>Alias:</strong> <%= aliases || "N/A" %></p>
         <p><strong>Familia:</strong> <%= family %></p>
     </div>
-    <form action="/nextcharacter" method="post">
+    <form action="/nextcharacter" method="get">
         <button type="submit">Siguiente</button>
     </form>
-    <form action="/backcharacter" method="post">
+    <form action="/backcharacter" method="get">
         <button type="submit">Anterior</button>
     </form>
     <form action="/backhome" method="get">

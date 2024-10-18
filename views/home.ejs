@@ -11,16 +11,15 @@
 <body>
   <header>
     <div class="nav-container">
-      <h1><a href="backhome">Wiki</a></h1>
+    <h1><a href="/backhome">WIKI</a></h1>
       <nav>
         <ul>
-          <li><a href="houses">HOUSES</a></li>
-          <li><a href="about">ABOUT</a></li>
+          <li><a href="/houses">HOUSES</a></li>
+          <li><a href="/about">ABOUT</a></li>
         </ul>
       </nav>
     </div>
   </header>
-  
   <div class="hero-section">
     <h1 class="hero-text">Game of Thrones Wiki</h1>
     <img class="hero-image" src="/Imagenes/fondo.jpg" alt="Imagen de fondo"> <!-- Cambiar a ruta absoluta -->
@@ -28,9 +27,9 @@
   
   <section class="nav-bar">
     <div class="search-container">
-      <form action="/search" method="post">
-          <input type="text" name="character" placeholder="Nombre del personaje">
-          <button type="submit">Search</button>
+      <form action="/search" method="get" onsubmit="this.action = '/search/' + encodeURIComponent(this.character.value)">
+        <input type="text" name="character" placeholder="Nombre del personaje" required>
+        <button type="submit">Search</button>
       </form>
     </div>
   </section>

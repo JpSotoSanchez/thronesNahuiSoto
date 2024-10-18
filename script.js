@@ -50,22 +50,27 @@ app.post("/back", (req, res) => {
 });
 */
 
-app.get('/backhome', (req, res) => {
-  res.redirect("/");
-});
 
-app.post('/search', (req, res) => {
-  let nombre = req.body.character.toLowerCase().split(' '); 
+app.get('/search/:characterName', (req, res) => {
+  // Captura el nombre del personaje desde la URL
+  let nombre = req.params.characterName.toLowerCase().split(' '); // Usa '-' en lugar de ' ' para el split
+  
   for (let j = 0; j < nombre.length; j++) {
+    // Capitaliza la primera letra de cada palabra
     nombre[j] = nombre[j].charAt(0).toUpperCase() + nombre[j].slice(1); 
   }
-  nombre = nombre.join(' '); 
-  const characterName = encodeURIComponent(nombre);
+  
+  nombre = nombre.join(' '); // Vuelve a unir las palabras en un solo string
+  
+  const characterName = encodeURIComponent(nombre); // Codifica el nombre para la URL
   const url1 = `https://thronesapi.com/api/v2/Characters`; // Primera API
   const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`; // Segunda API
+  
   let characterData1 = null;
   let characterData2 = null;
   let datos1 = null;
+
+  // Llamar a la primera API
   https.get(url1, (response) => {
     let resContent1 = '';
     response.on("data", (data) => {
@@ -74,21 +79,24 @@ app.post('/search', (req, res) => {
 
     response.on("end", () => {
       const jsonObj1 = JSON.parse(resContent1);
-      characterData1 = Array.isArray(jsonObj1) ? jsonObj1 : []; // Asegurarse de que sea un array
+      characterData1 = Array.isArray(jsonObj1) ? jsonObj1 : []; // Asegúrate de que sea un array
 
       // Si no se encontró en la primera API, seguir buscando en la segunda API
       if (!characterData1.length) {
         console.log("No se encontró en la primera API, buscando en la segunda...");
       }
+
       // Llamar a la segunda API
       https.get(url2, (response) => {
         let resContent2 = '';
         response.on("data", (data) => {
           resContent2 += data;
         });
+
         response.on("end", () => {
           const jsonObj2 = JSON.parse(resContent2);
           characterData2 = Array.isArray(jsonObj2) && jsonObj2.length > 0 ? jsonObj2[0] : null; // Obtener el primer personaje
+
           // Si hay personajes en la primera API, buscar coincidencias
           if (characterData1.length > 0 && characterData2) {
             for (let i = 0; i < characterData1.length; i++) {
@@ -98,6 +106,7 @@ app.post('/search', (req, res) => {
               }
             }
           }
+
           // Comprobar si se encontró en alguna de las APIs
           if (datos1 && characterData2) {
             res.render("individual.ejs", {
@@ -124,9 +133,16 @@ app.post('/search', (req, res) => {
   });
 });
 
+
+// Rutas para navegación
+app.get('/backhome', (req, res) => {
+  res.redirect("/");
+});
+
 app.get('/about', (req, res) => {
   res.render("about.ejs");
 });
+
 app.get('/houses', (req, res) => {
   res.render("houses.ejs");
 });
