@@ -17,9 +17,13 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong"); // Responde con un mensaje de error
 });
 
+var iterador=1;
+var min=1;
+var max=2134;
+
 // Ruta principal que renderiza la página de inicio
 app.get('/', (req, res) => {
-  res.render("home.ejs");
+  res.render("home.ejs",{iterador});
 });
 
 // Función para hacer una solicitud HTTPS y obtener datos
@@ -36,6 +40,7 @@ const fetchData = (url) => {
 // Ruta para buscar un personaje por nombre
 // Ruta para buscar un personaje por nombre
 app.get('/search/:characterName', async (req, res) => {
+  console.log("Entramos en search")
     try {
       // Captura y formatea el nombre del personaje desde la URL
       const characterName = encodeURIComponent(req.params.characterName
@@ -50,39 +55,28 @@ app.get('/search/:characterName', async (req, res) => {
       let datos1="";
       // Llama a las APIs
       const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
-      console.log(characterData2);
-      console.log(characterData2[0]);
       // Verifica qué datos recibimos
       // Busca coincidencias entre los resultados de las dos APIs
       if (characterData1.length > 0 && characterData2) {
-        console.log("SE ENTRO EN EL IF PARA ENCONTRAR COINCIDENCIA")
         for (let i = 0; i < characterData1.length; i++) {
-            console.log("Nombre1");
-            console.log(characterData1[i].fullName);
-            console.log("Nombre2");
-            console.log(characterData2.name);
           if (characterData1[i].fullName == characterData2[0].name) {
             datos1 = characterData1[i]; // Almacenar el personaje que coincide
             break;
           }
         }
       }
-      console.log("Datos del 1")
-      console.log(datos1);
-      console.log("Datos del 2")
-      console.log(characterData2);
       // Renderiza la vista con los datos encontrados
       if (datos1 && characterData2) {
-        console.log(datos1);
-        console.log(characterData2);
         res.render("individual.ejs", {
           character1: datos1,
           character2: characterData2[0],
+          
         });
       } else if (characterData2)  {
         res.render("individual.ejs", {
           character1: null,
-          character2: characterData2,
+          character2: characterData2[0],
+          
         });
       }
       else{
@@ -95,12 +89,10 @@ app.get('/search/:characterName', async (req, res) => {
 });
 
 
-var iterador=1;
-var min=1;
-var max=2134;
 
-app.get('/search/:iterador', async (req, res) => {
+app.get('/cards', async (req, res) => {
   iterador=1;
+  console.log("Entramos en cards")
   try {
     const url1 = `https://thronesapi.com/api/v2/Characters`;
     const url2 = `https://anapioficeandfire.com/api/characters/${iterador}`;
@@ -111,7 +103,7 @@ app.get('/search/:iterador', async (req, res) => {
     console.log(characterData2[0]);
     if (characterData1.length > 0 && characterData2) {
       for (let i = 0; i < characterData1.length; i++) {
-        if (characterData1[i].fullName == characterData2[0].name) {
+        if (characterData1[i].fullName == characterData2.name) {
           datos1 = characterData1[i]; // Almacenar el personaje que coincide
           break;
         }
@@ -119,17 +111,15 @@ app.get('/search/:iterador', async (req, res) => {
     }
     if (datos1 && characterData2) {
       res.render("individual.ejs", {
-        character1: datos1,          // Pasamos el personaje encontrado en la primera API
-        character2: characterData2[0], // Pasamos el personaje encontrado en la segunda API
-        iterador: iterador            // Pasamos el valor del iterador
+        character1: datos1,
+        character2: characterData2[0],
       });
-    } else if (characterData2) {
+    } else if (characterData2)  {
       res.render("individual.ejs", {
-        character1: null,            // No se encontró coincidencia en la primera API
-        character2: characterData2[0],  // Pasamos el personaje encontrado en la segunda API
-        iterador: iterador            // Pasamos el valor del iterador
+        character1: null,
+        character2: characterData2[0],
       });
-    }    
+    }
     else{
       res.render("error.ejs"); 
     }
