@@ -1,197 +1,159 @@
 // Importa el módulo 'express' que es un framework para construir servidores web en Node.js
 const express = require("express");
+const https = require("https"); // Para realizar solicitudes HTTP seguras
 
-// Crea una aplicación de Express que manejaremos para definir rutas y responder a solicitudes
+// Crea una aplicación de Express
 const app = express();
 
-// Importa otros módulos:
-// - 'https': para realizar solicitudes HTTP seguras
-// - 'FormData': para construir formularios que envían datos multipart/form-data
-// - 'mongoose': para conectarse y trabajar con bases de datos MongoDB
-const https = require("https");
-const mincharacters = 1;
-const maxcharacters = 2134;
+// Configuración de Middlewares
+app.use(express.json()); // Permite manejar datos en formato JSON
+app.use(express.urlencoded({ extended: true })); // Maneja datos enviados a través de formularios HTML
+app.set("view engine", "ejs"); // Configura EJS como el motor de plantillas
+app.use(express.static("public")); // Permite servir archivos estáticos
 
-// Configuración de Middlewares: Son funciones que se ejecutan cuando llega una solicitud al servidor
-// Permite que nuestra aplicación maneje datos en formato JSON en las solicitudes (útil en APIs)
-app.use(express.json());
-
-// Permite manejar datos enviados a través de formularios HTML codificados en URL
-// Esto es importante para procesar datos de formularios sin que estén en formato JSON
-app.use(express.urlencoded({ extended: true }));
-
-// Configura EJS como el motor de plantillas que usaremos para renderizar vistas dinámicas (HTML con variables)
-// Esto nos permite generar páginas HTML de manera más flexible y reutilizable
-app.engine("ejs", require("ejs").renderFile);
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-
-// Middleware personalizado para manejar errores y mostrar un mensaje de error al cliente
+// Middleware personalizado para manejar errores
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong");
+  console.error(err.stack); // Muestra el error en la consola
+  res.status(500).send("Something went wrong"); // Responde con un mensaje de error
 });
 
-app.route('/').get((req, res) => {
-  res.render("home.ejs", {});
+// Ruta principal que renderiza la página de inicio
+app.get('/', (req, res) => {
+  res.render("home.ejs");
 });
 
-/*
-let currentCharacterIndex = 0; 
+// Función para hacer una solicitud HTTPS y obtener datos
+const fetchData = (url) => {
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      let resContent = '';
+      response.on("data", (data) => resContent += data);
+      response.on("end", () => resolve(JSON.parse(resContent))); // Resuelve la promesa con los datos obtenidos
+    }).on("error", (error) => reject(error)); // Rechaza la promesa en caso de error
+  }); 
+};
 
-app.post("/next", (req, res) => {
-  currentCharacterIndex++; 
-  res.redirect("/"); 
-});
-
-app.post("/back", (req, res) => {
-  currentCharacterIndex--; 
-  res.redirect("/"); 
-});
-*/
-
-
-app.get('/search/:characterName', (req, res) => {
-  // Captura el nombre del personaje desde la URL
-  let nombre = req.params.characterName.toLowerCase().split(' '); // Usa '-' en lugar de ' ' para el split
-  for (let j = 0; j < nombre.length; j++) {
-    // Capitaliza la primera letra de cada palabra
-    nombre[j] = nombre[j].charAt(0).toUpperCase() + nombre[j].slice(1); 
-  }
-  nombre = nombre.join(' '); // Vuelve a unir las palabras en un solo string
-  const characterName = encodeURIComponent(nombre); // Codifica el nombre para la URL
-  const url1 = `https://thronesapi.com/api/v2/Characters`; // Primera API
-  const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`; // Segunda API
-  let characterData1 = null;
-  let characterData2 = null;
-  let datos1 = null;
-  // Llamar a la primera API
-  https.get(url1, (response) => {
-    let resContent1 = '';
-    response.on("data", (data) => {
-      resContent1 += data;
-    });
-    response.on("end", () => {
-      const jsonObj1 = JSON.parse(resContent1);
-      characterData1 = Array.isArray(jsonObj1) ? jsonObj1 : []; // Asegúrate de que sea un array
-
-      // Si no se encontró en la primera API, seguir buscando en la segunda API
-      if (!characterData1.length) {
-        console.log("No se encontró en la primera API, buscando en la segunda...");
+// Ruta para buscar un personaje por nombre
+// Ruta para buscar un personaje por nombre
+app.get('/search/:characterName', async (req, res) => {
+    try {
+      // Captura y formatea el nombre del personaje desde la URL
+      const characterName = encodeURIComponent(req.params.characterName
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitaliza la primera letra
+        .join(' ')); // Une las palabras en un solo string
+  
+      // URLs de las APIs
+      const url1 = `https://thronesapi.com/api/v2/Characters`;
+      const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`;
+      let datos1="";
+      // Llama a las APIs
+      const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+      console.log(characterData2);
+      console.log(characterData2[0]);
+      // Verifica qué datos recibimos
+      // Busca coincidencias entre los resultados de las dos APIs
+      if (characterData1.length > 0 && characterData2) {
+        console.log("SE ENTRO EN EL IF PARA ENCONTRAR COINCIDENCIA")
+        for (let i = 0; i < characterData1.length; i++) {
+            console.log("Nombre1");
+            console.log(characterData1[i].fullName);
+            console.log("Nombre2");
+            console.log(characterData2.name);
+          if (characterData1[i].fullName == characterData2[0].name) {
+            datos1 = characterData1[i]; // Almacenar el personaje que coincide
+            break;
+          }
+        }
       }
-
-      // Llamar a la segunda API
-      https.get(url2, (response) => {
-        let resContent2 = '';
-        response.on("data", (data) => {
-          resContent2 += data;
+      console.log("Datos del 1")
+      console.log(datos1);
+      console.log("Datos del 2")
+      console.log(characterData2);
+      // Renderiza la vista con los datos encontrados
+      if (datos1 && characterData2) {
+        console.log(datos1);
+        console.log(characterData2);
+        res.render("individual.ejs", {
+          character1: datos1,
+          character2: characterData2[0],
         });
-
-        response.on("end", () => {
-          const jsonObj2 = JSON.parse(resContent2);
-          characterData2 = Array.isArray(jsonObj2) && jsonObj2.length > 0 ? jsonObj2[0] : null; // Obtener el primer personaje
-
-          // Si hay personajes en la primera API, buscar coincidencias
-          if (characterData1.length > 0 && characterData2) {
-            for (let i = 0; i < characterData1.length; i++) {
-              if (characterData1[i].fullName === characterData2.name) {
-                datos1 = characterData1[i]; // Almacenar el personaje que coincide
-                break;
-              }
-            }
-          }
-
-          // Comprobar si se encontró en alguna de las APIs
-          if (datos1 && characterData2) {
-            res.render("individual.ejs", {
-              character1: datos1,
-              character2: characterData2,
-            });
-          } else if (!datos1 && characterData2) {
-            res.render("individual.ejs", {
-              character1: null, // Asumiendo que characterData1[0] podría ser relevante
-              character2: characterData2,
-            });
-          } else {
-            res.render("error.ejs");
-          }
+      } else if (characterData2)  {
+        res.render("individual.ejs", {
+          character1: null,
+          character2: characterData2,
         });
-      }).on("error", (e) => {
-        console.log("Error al realizar la solicitud a la segunda API", e);
-        res.send("Error en la solicitud a la segunda API.");
+      }
+      else{
+        res.render("error.ejs"); 
+      }
+    } catch (error) {
+      console.error("Error en la búsqueda:", error); // Muestra el error en la consola
+      res.send("Error en la solicitud."); // Responde con un mensaje de error
+    }
+});
+
+
+var iterador=1;
+var min=1;
+var max=2134;
+
+app.get('/search/', async (req, res) => {
+  try {
+    const url1 = `https://thronesapi.com/api/v2/Characters`;
+    const url2 = `https://anapioficeandfire.com/api/characters/${iterador}`;
+    let datos1="";
+    // Llama a las APIs
+    const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+    console.log(characterData2);
+    console.log(characterData2[0]);
+    if (characterData1.length > 0 && characterData2) {
+      console.log("SE ENTRO EN EL IF PARA ENCONTRAR COINCIDENCIA")
+      for (let i = 0; i < characterData1.length; i++) {
+          console.log("Nombre1");
+          console.log(characterData1[i].fullName);
+          console.log("Nombre2");
+          console.log(characterData2.name);
+        if (characterData1[i].fullName == characterData2[0].name) {
+          datos1 = characterData1[i]; // Almacenar el personaje que coincide
+          break;
+        }
+      }
+    }
+    console.log("Datos del 1")
+    console.log(datos1);
+    console.log("Datos del 2")
+    console.log(characterData2);
+    // Renderiza la vista con los datos encontrados
+    if (datos1 && characterData2) {
+      console.log(datos1);
+      console.log(characterData2);
+      res.render("individual.ejs", {
+        character1: datos1,
+        character2: characterData2[0],
       });
-    });
-  }).on("error", (e) => {
-    console.log("Error al realizar la solicitud a la primera API", e);
-    res.send("Error en la solicitud a la primera API.");
-  });
-});
-
-
-// Rutas para navegación
-app.get('/backhome', (req, res) => {
-  res.redirect("/");
-});
-
-app.get('/about', (req, res) => {
-  res.render("about.ejs");
-});
-
-app.get('/houses', (req, res) => {
-  res.render("houses.ejs");
-});
-
-app.get('/list',(req,res)=>{
-  const url1 = `https://thronesapi.com/api/v2/Characters`; // Primera API
-  const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`; // Segunda API
-  let characterData1 = null;
-  let characterData2 = null;
-  let datos1 = null;
-  // Llamar a la primera API
-  https.get(url1, (response) => {
-    let resContent1 = '';
-    response.on("data", (data) => {
-      resContent1 += data;
-    });
-
-    response.on("end", () => {
-      const jsonObj1 = JSON.parse(resContent1);
-      characterData1 = Array.isArray(jsonObj1) ? jsonObj1 : []; // Asegúrate de que sea un array
-      https.get(url2, (response) => {
-        let resContent2 = '';
-        response.on("data", (data) => {
-          resContent2 += data;
-        });
-
-        response.on("end", () => {
-          const jsonObj2 = JSON.parse(resContent2);
-          characterData2 = Array.isArray(jsonObj2) && jsonObj2.length > 0 ? jsonObj2[0] : null; // Obtener el primer personaje
-
-          // Si hay personajes en la primera API, buscar coincidencias
-          if (characterData1.length > 0 && characterData2) {
-            for (let i = 0; i < characterData1.length; i++) {
-              if (characterData1[i].fullName === characterData2.name) {
-                datos1 = characterData1[i]; // Almacenar el personaje que coincide
-                break;
-              }
-            }
-          }
-          res.render("individual.ejs", {
-            character1: datos1,
-            character2: characterData2,
-          });
-        });
-      }).on("error", (e) => {
-        console.log("Error al realizar la solicitud a la segunda API", e);
-        res.send("Error en la solicitud a la segunda API.");
+    } else if (characterData2)  {
+      res.render("individual.ejs", {
+        character1: null,
+        character2: characterData2,
       });
-    });
-  }).on("error", (e) => {
-    console.log("Error al realizar la solicitud a la primera API", e);
-    res.send("Error en la solicitud a la primera API.");
-  });
+    }
+    else{
+      res.render("error.ejs"); 
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error); // Muestra el error en la consola
+    res.send("Error en la solicitud."); // Responde con un mensaje de error
+  }
 });
+  
+// Otras rutas para navegación
+app.get('/backhome', (req, res) => res.redirect("/")); // Redirige a la página de inicio
+app.get('/about', (req, res) => res.render("about.ejs")); // Renderiza la página 'about'
+app.get('/houses', (req, res) => res.render("houses.ejs")); // Renderiza la página de casas
 
+// Inicia el servidor en el puerto 3000
 app.listen(3000, () => {
-  console.log("Listening on port 3000"); 
+  console.log("Listening on port 3000");
 });
