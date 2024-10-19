@@ -51,16 +51,31 @@ app.get('/search/:characterName', async (req, res) => {
     const url1 = `https://thronesapi.com/api/v2/Characters`;
     const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`;
     let datos1 = "";
-    const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+    let [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
     if (characterData1.length > 0 && Array.isArray(characterData2) && characterData2.length > 0) {
       for (let i = 0; i < characterData1.length; i++) {
-        if (characterData1[i].fullName.toLowerCase() === characterData2[0].name.toLowerCase() || (characterData1[i].firstName.toLowerCase()+" "+characterData1[i].lastName.toLowerCase()) === characterData2[0].name.toLowerCase() ) {
+        console.log(i);
+        if (characterData1[i].fullName.toLowerCase() === characterData2[0].name.toLowerCase() 
+          || (characterData1[i].firstName.toLowerCase()+" "+characterData1[i].lastName.toLowerCase()) === characterData2[0].name.toLowerCase() ) {
           datos1 = characterData1[i];
           // Extraer el número de la URL en characterData2[0].url
           const urlParts = characterData2[0].url.split('/');
           iterador = urlParts[urlParts.length - 1]; // El último elemento es el número
           break;
         }
+      }
+    }
+    else{
+      console.log("Nada con el nombre completo");
+      console.log(req.params.characterName.toLowerCase());
+      for (let i = 0; i < characterData1.length; i++) {
+        if(characterData1[i].firstName.toLowerCase()==req.params.characterName.toLowerCase() 
+        || characterData1[i].lastName.toLowerCase()==req.params.characterName.toLowerCase()){
+          console.log("ENCONTRE ALGO LESGO");
+          datos1 = characterData1[i];
+          characterData2= await fetchData(`https://anapioficeandfire.com/api/characters?name=${datos1.fullName}`);
+          console.log(characterData2);
+      }
       }
     }
 
