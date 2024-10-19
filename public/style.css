@@ -1,138 +1,407 @@
 body {
-    font-family: "Courier New", sans-serif;
+   font-family: "Courier New", sans-serif;
 }
 header {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 20px 10%;
-   background-color: #fff;
-   border-bottom: 1px solid #f2f4f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10%;
+  background-color: #fff;
+  border-bottom: 1px solid #f2f4f2;
 }
 header h1 {
-   font-family: "Game of Thrones";
-   font-size: 1.3em;
-   margin: 0;
+  font-family: "Game of Thrones";
+  font-size: 1.3em;
+  margin: 0;
 }
 header h1 a{
    text-decoration: none;
    color: #000;
-}
+ }
 @font-face {
-    font-family: "Game of Thrones";
-    src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot");
-    src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.svg#Game of Thrones")format("svg");
+   font-family: "Game of Thrones";
+   src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot");
+   src: url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.eot?#iefix")format("embedded-opentype"),
+   url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff2")format("woff2"),
+   url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.woff")format("woff"),
+   url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.ttf")format("truetype"),
+   url("https://db.onlinewebfonts.com/t/97c4b25dc74e0ab045154e75a8fdd69d.svg#Game of Thrones")format("svg");
 }
-nav ul {
-   list-style-type: none;
-   margin: 0;
-   padding: 0;
-   display: flex;
-   gap: 40px;
+.no-mark::marker{
+   display: none; /* Oculta el marcador */
+ }
+/* Contenedor de navegación */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
 }
 
-.titulo{
-   font-family: "Game of Thrones";
-   margin: 0;
+/* Estilo para la barra de navegación */
+nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 50px;
+  width: 100%;
 }
 
 nav ul li {
-   display: inline;
+  margin: 20 80px;
 }
+
+/* Ajustes para los enlaces de navegación */
 nav ul li a {
-   text-decoration: none;
-   color: #000;
-   font-family: 'Game of Thrones';
+  text-decoration: none;
+  color: #000;
+  font-family: 'Game of Thrones', serif;
+  font-size: 1.2em;
 }
-.navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-}
-.navbar a:hover {
-    background-color: #ddd;
-    color: black;
-}
+
+/* Estilos para la barra de búsqueda */
 .search-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: flex-end;
-    padding: 14px 20px;
+  flex-grow: 2; /* Esto hace que la barra de búsqueda crezca en el espacio disponible */
+  list-style: none;
 }
-.search-container input[type=text] {
-    padding: 6px;
-    margin-top: 8px;
-    font-size: 17px;
-    border: none;
+
+.search-container form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.search-container input {
+  padding: 14px;
+  font-size: 15px;
+  font-family: "Game of Thrones";
+}
+
 .search-container button {
-    padding: 6px 10px;
-    margin-top: 8px;
-    margin-right: 16px;
-    background: #bdb7b7;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
+  padding: 13px 23px;
+  font-size: 18px;
+  font-family: "Game of Thrones";
+  background-color: #f7f5f0;
+  color: rgb(203, 171, 57);
+  border: none;
+  cursor: pointer;
 }
+
 .search-container button:hover {
-    background: #948989;
+  background-color: #d9ceb5;
 }
+
+/* Estilos para los enlaces cuando se pasa el cursor */
+nav ul li a:hover {
+  color: #f0a500;
+}
+
 .hero-section {
-   position: relative;
-   height: 100vh;
-   width: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   overflow: hidden;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 .hero-image {
-   position: absolute;
-   top: -2%; /* Ajustar la posición de la imagen */
-   left: 0;
-   width: 100%;
-   height: 150vh; /* Aumentar la altura para cubrir más espacio */
-   object-fit: cover;
-   filter: blur(10px); /* Aplicamos blur al inicio */
-   transition: filter 0.5s ease; /* Transición del blur */
+  position: absolute;
+  top: -2%; /* Ajustar la posición de la imagen */
+  left: 0;
+  width: 100%;
+  height: 150vh; /* Aumentar la altura para cubrir más espacio */
+  object-fit: cover;
+  filter: blur(10px); /* Aplicamos blur al inicio */
+  transition: filter 0.5s ease; /* Transición del blur */
 }
 .hero-text {
-   font-family: "Game of Thrones";
-   position: relative;
-   color: white;
-   font-size: 4em;
-   z-index: 1;
-   opacity: 1;
-   transition: opacity 0.5s ease; /* Transición de la opacidad */
-}
-.scrolled .hero-image {
-   filter: blur(0); /* Elimina el blur */
+  font-family: "Game of Thrones";
+  position: relative;
+  color: white;
+  font-size: 4em;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.5s ease; /* Transición de la opacidad */
 }
 
-.scrolled .hero-text {
-   opacity: 0; /* Desaparece el texto */
+#about-section {
+  padding: 300px 400px;  /* Aumenta el padding superior e inferior */
+  background-color: #fff;
+  text-align: center; /* Asegura que el texto esté centrado */
 }
+
+.about-text {
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto; /* Centra el contenido horizontalmente */
+  padding: 50px; /* Añade un poco de padding interno */
+}
+
+#about-section h2 {
+  font-size: 2.8em;
+  color: #1c1c1c;
+  margin-bottom: 80px;  /* Añade espacio debajo del título */
+}
+
+#about-section p {
+  font-size: 1.8em;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
 .nav-container {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   width: 100%;
-   max-width: 1200px;
-   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .background-section {
-   background-color: #f4f4f4; /* Fondo claro */
-   padding: 40px 20px;
-   text-align: center;
-   border-top: 1px solid #ccc; /* Línea de separación */
-   border-bottom: 1px solid #ccc;
-   margin-bottom: 20px;
+  background-color: #f4f4f4; /* Fondo claro */
+  padding: 40px 20px;
+  text-align: center;
+  border-top: 1px solid #ccc; /* Línea de separación */
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  padding: 80px;
+  text-align: center;
+  background-color: #f7f7f7;  
+}
+
+.card {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+  padding: 30px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);  /* Aumenta el tamaño ligeramente al hacer hover */
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.character-image {
+  width: 70%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.character-image:hover {
+  opacity: 0.9;
+}
+
+.card-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  font-size: 1.1em;
+  color: #666;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.styled-button {
+  font-family: "Game of Thrones";
+  background-color:  #f0a500;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.styled-button:hover {
+  background-color:  #cb8d07;
+}
+
+@media (max-width: 768px) {
+  .card {
+      width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+      font-size: 1.2rem;
+  }
+
+  p {
+      font-size: 0.9rem;
+  }
+
+  .styled-button {
+      font-size: 0.9rem;
+      padding: 8px 15px;
+  }
+}
+/*Acordeón*/
+
+.titulo {
+  text-align: center;
+  font-family: "Game of Thrones";
+  font-size: 2.5em;
+  margin: 20px 0;
+}
+.subtitle {
+  text-align: center; /* Alineación centrada */
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.accordion {
+  max-width: 800px; /* Limitar ancho del acordeón */
+ margin: 0 auto; 
+  border-radius: 8px;
+}
+
+.accordion-item {
+  background-color: rgb(227, 189, 84);
+  font-family: "Game of Thrones";
+  margin-bottom: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #c19d54;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+  background-color: #dec47b;
+}
+
+.house-image {
+  width: 50px;
+  font-family: 'Courier New', Courier, monospace;
+  height: 50px;
+  margin-right: 20px;
+}
+
+.accordion-content {
+  max-height: 0; /* Contraído por defecto */
+  overflow: hidden; /* Ocultar contenido cuando esté contraído */
+  transition: max-height 0.3s ease-out; 
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.accordion-content ul {
+  padding-left: 20px;
+ list-style-type: none;
+}
+
+.accordion-content ul li {
+  margin: 5px 0;
+}
+.accordion-content.active {
+  display: block;
+  max-height: 500px; /* Ajusta este valor según el contenido */
+}
+
+/* Estilo para la página de error */
+.error-page {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.polaroid {
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 250px;
+  margin: 20px auto;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.error-image {
+  width: 100%;
+  height: auto;
+}
+
+.polaroid p {
+  font-size: 14px;
+  font-style: italic;
+  color: #333;
+}
+
+.back-button {
+  background-color: #1e3d59;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2d506f;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media screen and (max-width: 600px) {
+  .polaroid {
+    width: 80%;
+  }
+
+  .back-button {
+    width: 80%;
+    padding: 14px 28px;
+  }
+}

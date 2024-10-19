@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <title>Game of Thrones</title>
     <link rel="stylesheet" href="/style.css">  <!-- Cambiar a ruta absoluta -->
-    <script src="/script.js"></script>           <!-- Cambiar a ruta absoluta -->
+    <script src="/script1.js"></script>           <!-- Cambiar a ruta absoluta -->
     <link href="https://db.onlinewebfonts.com/c/97c4b25dc74e0ab045154e75a8fdd69d?family=Game+of+Thrones" rel="stylesheet">
 </head>
 <body>
     <header>
         <div class="nav-container">
-        <h1><a href="/backhome">WIKI</a></h1>
+          <h1><a href="/backhome">WIKI</a></h1>
+          <ul class="no-mark" >
+            <li class="search-container ">
+              <form action="/search" method="get" onsubmit="this.action = '/search/' + encodeURIComponent(this.character.value)">
+                <input type="text" name="character" placeholder="character name" required>
+                <button type="submit">Search</button>
+              </form>
+            </li>
+          </ul>
           <nav>
             <ul>
               <li><a href="/cards">CARDS</a></li>
               <li><a href="/houses">HOUSES</a></li>
-              <li><a href="/about">ABOUT</a></li>
             </ul>
           </nav>
         </div>
@@ -29,26 +36,32 @@
     var family = locals.character1 ? character1.family : "Unknown";
     var aliases = character2.aliases.join(', ');
     %>
-    <h1 class="titulo"><%=character2.name%></h1>
-    <div>
-        <img src="<%= imagen %>" alt="<%= character2.name %>">
-        <h2><strong>ID:</strong> <%= id %></h2>
-        <h1><%= firstName %></h1>
-        <h1><%= lastName %></h1>
-        <p><strong>Born in:</strong> <%= character2.born || "N/A" %></p>
-        <p><strong>Died in:</strong> <%= character2.died || "N/A" %></p>
-        <p><strong>Título:</strong> <%= title %></p>
-        <p><strong>Alias:</strong> <%= aliases || "N/A" %></p>
-        <p><strong>Familia:</strong> <%= family %></p>
+    <!-- tarjetas-->
+    <div class="card-container">
+        <div class="card">
+            <img src="<%= imagen %>" alt="<%= character2.name %>" class="character-image">
+            <div class="card-content">
+                <h2><%= firstName %> <%= lastName %></h2>
+                <p><strong>ID:</strong> <%= id %></p>
+                <p><strong>Born in:</strong> <%= character2.born || "N/A" %></p>
+                <p><strong>Died in:</strong> <%= character2.died || "N/A" %></p>
+                <p><strong>Title:</strong> <%= title %></p>
+                <p><strong>Alias:</strong> <%= aliases || "N/A" %></p>
+                <p><strong>Family:</strong> <%= family %></p>
+            </div>
+        </div>
     </div>
-    <form action="/nextcharacter" method="get">
-        <button type="submit">Siguiente</button>
-    </form>
-    <form action="/backcharacter" method="get">
-        <button type="submit">Anterior</button>
-    </form>
-    <form action="/backhome" method="get">
-        <button type="submit">Volver a Inicio</button>
-    </form>
+    <div class="button-group">
+        <form action="/nextcharacter" method="get">
+            <button class="styled-button">Next</button>
+        </form>
+        <form action="/backcharacter" method="get">
+            <button class="styled-button">Previous</button>
+        </form>
+        <form action="/backhome" method="get">
+            <button class="styled-button">Back to the main page</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

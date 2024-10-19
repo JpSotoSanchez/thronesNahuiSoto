@@ -40,53 +40,51 @@ const fetchData = (url) => {
 // Ruta para buscar un personaje por nombre
 // Ruta para buscar un personaje por nombre
 app.get('/search/:characterName', async (req, res) => {
-  console.log("Entramos en search")
-    try {
-      // Captura y formatea el nombre del personaje desde la URL
-      const characterName = encodeURIComponent(req.params.characterName
-        .toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitaliza la primera letra
-        .join(' ')); // Une las palabras en un solo string
-  
-      // URLs de las APIs
-      const url1 = `https://thronesapi.com/api/v2/Characters`;
-      const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`;
-      let datos1="";
-      // Llama a las APIs
-      const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
-      // Verifica qué datos recibimos
-      // Busca coincidencias entre los resultados de las dos APIs
-      if (characterData1.length > 0 && characterData2) {
-        for (let i = 0; i < characterData1.length; i++) {
-          if (characterData1[i].fullName == characterData2[0].name) {
-            datos1 = characterData1[i]; // Almacenar el personaje que coincide
-            break;
-          }
+  console.log("Entramos en search");
+  try {
+    const characterName = encodeURIComponent(req.params.characterName
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '));
+
+    const url1 = `https://thronesapi.com/api/v2/Characters`;
+    const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`;
+    let datos1 = "";
+    const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+    console.log(characterData1);
+    console.log(characterData2);
+    if (characterData1.length > 0 && Array.isArray(characterData2) && characterData2.length > 0) {
+      for (let i = 0; i < characterData1.length; i++) {
+        if (characterData1[i].fullName.toLowerCase() === characterData2[0].name.toLowerCase()) {
+          datos1 = characterData1[i];
+          // Extraer el número de la URL en characterData2[0].url
+          const urlParts = characterData2[0].url.split('/');
+          iterador = urlParts[urlParts.length - 1]; // El último elemento es el número
+          break;
         }
       }
-      // Renderiza la vista con los datos encontrados
-      if (datos1 && characterData2) {
-        res.render("individual.ejs", {
-          character1: datos1,
-          character2: characterData2[0],
-          
-        });
-      } else if (characterData2)  {
-        res.render("individual.ejs", {
-          character1: null,
-          character2: characterData2[0],
-          
-        });
-      }
-      else{
-        res.render("error.ejs"); 
-      }
-    } catch (error) {
-      console.error("Error en la búsqueda:", error); // Muestra el error en la consola
-      res.send("Error en la solicitud."); // Responde con un mensaje de error
     }
+
+    if (datos1 && characterData2.length > 0) {
+      res.render("individual.ejs", {
+        character1: datos1,
+        character2: characterData2[0],
+      });
+    } else if (characterData2.length > 0) {
+      res.render("individual.ejs", {
+        character1: null,
+        character2: characterData2[0],
+      });
+    } else {
+      res.render("error.ejs");
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error);
+    res.send("Error en la solicitud.");
+  }
 });
+
 
 
 
@@ -112,12 +110,102 @@ app.get('/cards', async (req, res) => {
     if (datos1 && characterData2) {
       res.render("individual.ejs", {
         character1: datos1,
-        character2: characterData2[0],
+        character2: characterData2,
       });
     } else if (characterData2)  {
       res.render("individual.ejs", {
         character1: null,
-        character2: characterData2[0],
+        character2: characterData2,
+      });
+    }
+    else{
+      res.render("error.ejs"); 
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error); // Muestra el error en la consola
+    res.send("Error en la solicitud."); // Responde con un mensaje de error
+  }
+});
+
+app.get('/nextcharacter', async (req, res) => {
+  if (iterador+1>max){
+    iterador=min;
+  }
+  else{
+    iterador+=1;
+  }
+  console.log("Entramos en cards")
+  try {
+    const url1 = `https://thronesapi.com/api/v2/Characters`;
+    const url2 = `https://anapioficeandfire.com/api/characters/${iterador}`;
+    let datos1="";
+    // Llama a las APIs
+    const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+    console.log(characterData2);
+    console.log(characterData2[0]);
+    if (characterData1.length > 0 && characterData2) {
+      for (let i = 0; i < characterData1.length; i++) {
+        if (characterData1[i].fullName == characterData2.name) {
+          datos1 = characterData1[i]; // Almacenar el personaje que coincide
+          break;
+        }
+      }
+    }
+    if (datos1 && characterData2) {
+      res.render("individual.ejs", {
+        character1: datos1,
+        character2: characterData2,
+      });
+    } else if (characterData2)  {
+      res.render("individual.ejs", {
+        character1: null,
+        character2: characterData2,
+      });
+    }
+    else{
+      res.render("error.ejs"); 
+    }
+  } catch (error) {
+    console.error("Error en la búsqueda:", error); // Muestra el error en la consola
+    res.send("Error en la solicitud."); // Responde con un mensaje de error
+  }
+});
+
+app.get('/backcharacter', async (req, res) => {
+  if (iterador-1<min){
+    iterador=max;
+  }
+  else{
+    iterador-=1;
+  }
+  console.log("Entramos en cards")
+  try {
+    const url1 = `https://thronesapi.com/api/v2/Characters`;
+    const url2 = `https://anapioficeandfire.com/api/characters/${iterador}`;
+    let datos1="";
+    // Llama a las APIs
+    const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
+    console.log("Datos1");
+    console.log(characterData2);
+    console.log("Datos1.2");
+    console.log(characterData2[0]);
+    if (characterData1.length > 0 && characterData2) {
+      for (let i = 0; i < characterData1.length; i++) {
+        if (characterData1[i].fullName == characterData2.name) {
+          datos1 = characterData1[i]; // Almacenar el personaje que coincide
+          break;
+        }
+      }
+    }
+    if (datos1 && characterData2) {
+      res.render("individual.ejs", {
+        character1: datos1,
+        character2: characterData2,
+      });
+    } else if (characterData2)  {
+      res.render("individual.ejs", {
+        character1: null,
+        character2: characterData2,
       });
     }
     else{
@@ -130,9 +218,43 @@ app.get('/cards', async (req, res) => {
 });
   
 // Otras rutas para navegación
-app.get('/backhome', (req, res) => res.redirect("/")); // Redirige a la página de inicio
-app.get('/about', (req, res) => res.render("about.ejs")); // Renderiza la página 'about'
-app.get('/houses', (req, res) => res.render("houses.ejs")); // Renderiza la página de casas
+app.get('/backhome', async (req, res) => res.redirect("/")); // Redirige a la página de inicio
+
+app.get('/houses', async (req, res) => {
+  const url1 = `https://thronesapi.com/api/v2/Characters`;
+  const characters = await fetchData(url1); // Aquí es correcto
+  // Supongamos que 'characters' es un array de objetos de personajes
+  // Inicializa el Map
+  let diccionario = new Map();
+
+
+  // Recorre el array de personajes
+  for (let i = 0; i < characters.length; i++) {
+    const personaje = characters[i];
+
+    // Verifica si el personaje tiene una familia
+    if (personaje.family) {
+      // Simplifica el nombre de la casa (remueve "House " y recorta espacios)
+      const familiaSimplificada = personaje.family.replace(/^House\s+/i, '').trim();
+
+      // Si la familia no existe en el Map, inicialízala como un array
+      if (!diccionario.has(familiaSimplificada)) {
+        diccionario.set(familiaSimplificada, []); // Inicializa un array para esa familia
+      }
+
+      // Agrega el personaje completo al array correspondiente a la familia
+      diccionario.get(familiaSimplificada).push(personaje);
+    }
+  }
+
+  // Muestra el diccionario
+  console.log(diccionario);
+  
+  // Renderiza la vista con el diccionario
+  res.render("houses.ejs", { diccionario });
+});
+
+
 
 // Inicia el servidor en el puerto 3000
 app.listen(3000, () => {

@@ -5,26 +5,53 @@
   <meta name="viewport" content="width=device-width">
   <title>Game of Thrones</title>
   <link rel="stylesheet" href="/style.css">  <!-- Cambiar a ruta absoluta -->
-  <script src="/script.js"></script>           <!-- Cambiar a ruta absoluta -->
+  <script src="/script1.js"></script>
   <link href="https://db.onlinewebfonts.com/c/97c4b25dc74e0ab045154e75a8fdd69d?family=Game+of+Thrones" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="nav-container">
-        <h1><a href="/backhome">WIKI</a></h1>
-          <nav>
-            <ul>
-              <li><a href="/cards">CARDS</a></li>
-              <li><a href="/houses">HOUSES</a></li>
-              <li><a href="/about">ABOUT</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-    <h1 class="titulo" >HOUSES</h1>
-    <h2>Here we have the houses that fight for the iron throne</h2>
-    <form action="/backhome" method="get">
-        <button type="submit">Volver a Inicio</button>
-    </form>
+  <header>
+    <div class="nav-container">
+      <h1><a href="/backhome">WIKI</a></h1>
+      <ul class="no-mark" >
+        <li class="search-container ">
+          <form action="/search" method="get" onsubmit="this.action = '/search/' + encodeURIComponent(this.character.value)">
+            <input type="text" name="character" placeholder="character name" required>
+            <button type="submit">Search</button>
+          </form>
+        </li>
+      </ul>
+      <nav>
+        <ul>
+          <li><a href="/cards">CARDS</a></li>
+          <li><a href="/houses">HOUSES</a></li>
+          <li><a href="#about">ABOUT</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+      <h1 class="titulo">HOUSES</h1>
+      <h2 class="subtitle">Here we have the houses that fight for the iron throne</h2>
+      
+      <div class="accordion">
+        <% diccionario.forEach((personajes, familia) => { %>
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <img src="Imagenes/<%= familia.toLowerCase().replace(/\s+/g, '-') %>.png" alt="House <%= familia %>" class="house-image">
+              <h3>House <%= familia %></h3>
+            </div>
+            <div class="accordion-content">
+              <ul>
+                <% personajes.forEach(personaje => { %>
+                  <li>
+                    <img src="<%= personaje.imageUrl %>" alt="<%= personaje.name %>" class="character-image">
+                    <span><%= personaje.name %></span>
+                  </li>
+                <% }); %>
+              </ul>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      
 </body>
 </html>
