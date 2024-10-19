@@ -108,7 +108,7 @@ app.get('/search/:characterName', async (req, res) => {
 
 
 app.get('/cards', async (req, res) => {
-  iterador=1;
+  iterador=1303;
   console.log("Entramos en cards")
   try {
     const url1 = `https://thronesapi.com/api/v2/Characters`;
