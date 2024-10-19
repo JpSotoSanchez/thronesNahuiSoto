@@ -35,7 +35,7 @@
         <% diccionario.forEach((personajes, familia) => { %>
           <div class="accordion-item">
             <div class="accordion-header">
-              <img src="Imagenes/<%= familia.toLowerCase().replace(/\s+/g, '-') %>.png" alt="House <%= familia %>" class="house-image">
+              <img src="/Imagenes/<%= familia.toLowerCase().replace(/\s+/g, '-') %>.png" alt="House <%= familia %>" class="house-image">
               <% if (familia === "Free Folk" || familia === "None") { %>
                 <h3><%= familia %></h3>
               <% } else { %>
