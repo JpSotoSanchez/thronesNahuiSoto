@@ -52,11 +52,9 @@ app.get('/search/:characterName', async (req, res) => {
     const url2 = `https://anapioficeandfire.com/api/characters?name=${characterName}`;
     let datos1 = "";
     const [characterData1, characterData2] = await Promise.all([fetchData(url1), fetchData(url2)]);
-    console.log(characterData1);
-    console.log(characterData2);
     if (characterData1.length > 0 && Array.isArray(characterData2) && characterData2.length > 0) {
       for (let i = 0; i < characterData1.length; i++) {
-        if (characterData1[i].fullName.toLowerCase() === characterData2[0].name.toLowerCase()) {
+        if (characterData1[i].fullName.toLowerCase() === characterData2[0].name.toLowerCase() || (characterData1[i].firstName.toLowerCase()+" "+characterData1[i].lastName.toLowerCase()) === characterData2[0].name.toLowerCase() ) {
           datos1 = characterData1[i];
           // Extraer el número de la URL en characterData2[0].url
           const urlParts = characterData2[0].url.split('/');
@@ -67,11 +65,17 @@ app.get('/search/:characterName', async (req, res) => {
     }
 
     if (datos1 && characterData2.length > 0) {
+      console.log("TENGO AMBOS");
+      console.log(datos1);
+      console.log(characterData2);
       res.render("individual.ejs", {
         character1: datos1,
         character2: characterData2[0],
       });
     } else if (characterData2.length > 0) {
+      console.log("TENGO solo1");
+      console.log(datos1);
+      console.log(characterData2[0]);
       res.render("individual.ejs", {
         character1: null,
         character2: characterData2[0],
@@ -231,6 +235,21 @@ app.get('/houses', async (req, res) => {
   // Recorre el array de personajes
   for (let i = 0; i < characters.length; i++) {
     const personaje = characters[i];
+    if (personaje.family == "Targaryan") {
+      personaje.family = "Targaryen"; // Cambia la familia a "Targaryen"
+    }
+    if (personaje.family == "Unkown") {
+      personaje.family = "Unknown"; // Cambia la familia a "Targaryen"
+    }
+    if (personaje.family == "Lorathi") {
+      personaje.family = "Lorath"; // Cambia la familia a "Targaryen"
+    }
+    if (personaje.family == "Sand" || personaje.family == "Viper" || personaje.family == "Worm") {
+      personaje.family = "Martell"; // Cambia la familia a "Targaryen"
+    }
+    if (personaje.family == "Qyburn") {
+      personaje.family = "Bolton"; // Cambia la familia a "Targaryen"
+    }
 
     // Verifica si el personaje tiene una familia
     if (personaje.family) {

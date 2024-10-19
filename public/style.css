@@ -394,6 +394,12 @@ p {
   background-color: #2d506f;
 }
 
+.imgacordeon{
+   width: 100px;
+   height: 100px;
+}
+
+
 /* Responsivo para pantallas pequeñas */
 @media screen and (max-width: 600px) {
   .polaroid {

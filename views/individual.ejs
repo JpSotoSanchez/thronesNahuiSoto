@@ -28,7 +28,6 @@
         </div>
       </header>
     <% 
-    var imagen = locals.character1 ? character1.imageUrl : 'Imagenes/default.png';
     var id = locals.character1 ? character1.id+1 : "N/A";
     var firstName = locals.character1 ? character1.firstName : character2.name.split(' ')[0];
     var lastName = locals.character1 ? character1.lastName : character2.name.split(' ')[1];
@@ -39,7 +38,7 @@
     <!-- tarjetas-->
     <div class="card-container">
         <div class="card">
-            <img src="<%= imagen %>" alt="<%= character2.name %>" class="character-image">
+            <img src="<%= locals.character1 ? character1.imageUrl : 'Imagenes/default.png' %>" alt="Character Image" class="character-image">
             <div class="card-content">
                 <h2><%= firstName %> <%= lastName %></h2>
                 <p><strong>ID:</strong> <%= id %></p>

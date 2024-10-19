@@ -37,14 +37,18 @@
           <div class="accordion-item">
             <div class="accordion-header">
               <img src="Imagenes/<%= familia.toLowerCase().replace(/\s+/g, '-') %>.png" alt="House <%= familia %>" class="house-image">
-              <h3>House <%= familia %></h3>
+              <% if (familia === "Free Folk" || familia === "None") { %>
+                <h3><%= familia %></h3>
+              <% } else { %>
+                <h3>House <%= familia %></h3>
+              <% } %>
             </div>
             <div class="accordion-content">
               <ul>
                 <% personajes.forEach(personaje => { %>
                   <li>
-                    <img src="<%= personaje.imageUrl %>" alt="<%= personaje.name %>" class="character-image">
-                    <span><%= personaje.name %></span>
+                    <img src="<%= personaje.imageUrl %>" alt="<%= personaje.name %>" class="imgacordeon">
+                    <h1><%= personaje.fullName %></h1>
                   </li>
                 <% }); %>
               </ul>
@@ -53,5 +57,6 @@
         <% }); %>
       </div>
       
+
 </body>
 </html>
